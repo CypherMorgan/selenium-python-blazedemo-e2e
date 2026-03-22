@@ -3,7 +3,7 @@
 ![Python](https://img.shields.io/badge/python-3.x-blue)
 ![Selenium](https://img.shields.io/badge/selenium-automation-green)
 ![PyTest](https://img.shields.io/badge/pytest-testing-orange)
-![CI](https://img.shields.io/badge/CI-GitHub%20Actions-blue)
+![CI](https://github.com/CypherMorgan/selenium-python-blazedemo-e2e/actions/workflows/tests.yml/badge.svg)
 
 End-to-end UI automation framework built using **Selenium, Python, and PyTest**.
 The project automates a complete flight booking flow on **https://blazedemo.com/** using a clean **Page Object Model (POM)** architecture.
@@ -242,6 +242,21 @@ On test failure:
 * Screenshot is captured automatically
 * Saved in `screenshots/`
 * Embedded in HTML report
+
+---
+
+# Test Reports
+
+## Live Report (GitHub Pages)
+👉 https://cyphermorgan.github.io/selenium-python-blazedemo-e2e/
+
+## Report Preview
+![Report](screenshots/report-preview.png)
+
+## CI Artifacts
+Reports are also available in GitHub Actions:
+
+Actions → Latest Run → Artifacts → report.html
 
 ---
 
