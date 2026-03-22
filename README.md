@@ -3,11 +3,12 @@
 ![Python](https://img.shields.io/badge/python-3.x-blue)
 ![Selenium](https://img.shields.io/badge/selenium-automation-green)
 ![PyTest](https://img.shields.io/badge/pytest-testing-orange)
+![CI](https://img.shields.io/badge/CI-GitHub%20Actions-blue)
 
 End-to-end UI automation framework built using **Selenium, Python, and PyTest**.
 The project automates a complete flight booking flow on **https://blazedemo.com/** using a clean **Page Object Model (POM)** architecture.
 
-This repository demonstrates a realistic automation framework structure with logging, reporting, retry logic, and data-driven testing.
+This repository demonstrates a realistic automation framework structure with logging, reporting, retry logic, parallel execution, and environment-based configuration.
 
 ---
 
@@ -20,6 +21,7 @@ This repository demonstrates a realistic automation framework structure with log
 * PyTest HTML Reporting
 * PyTest xdist (parallel execution)
 * PyTest rerunfailures (retry failed tests)
+* GitHub Actions (CI/CD)
 
 ---
 
@@ -46,7 +48,10 @@ The automation covers the following end-to-end workflow:
 * Structured logging for debugging
 * Parallel test execution
 * Automatic retry of flaky tests
-* Clean modular framework structure
+* CI/CD pipeline with GitHub Actions
+* Headless test execution support
+* Browser selection via CLI (`--browser`)
+* Environment-based execution (`--env`)
 
 ---
 
@@ -99,25 +104,7 @@ Passenger test data is defined in:
 data/passengers.py
 ```
 
-The test uses **PyTest parametrize** to automatically execute the same test for multiple passengers.
-
-Example dataset:
-
-```
-PASSENGERS = [
-    {"name": "John Tester", ...},
-    {"name": "Alice Walker", ...},
-    {"name": "Michael Smith", ...}
-]
-```
-
-PyTest automatically generates multiple test executions:
-
-```
-test_end_to_end_booking[John Tester]
-test_end_to_end_booking[Alice Walker]
-test_end_to_end_booking[Michael Smith]
-```
+The test uses **PyTest parametrize** to execute the same test for multiple passengers.
 
 ---
 
@@ -140,23 +127,75 @@ pip install -r requirements.txt
 
 # Running Tests
 
-Run all tests:
+### Run all tests
 
 ```
 pytest
 ```
 
-Run with detailed output:
+### Run with verbose output
 
 ```
 pytest -v
 ```
 
-Run tests in parallel:
+### Run in parallel
 
 ```
-pytest -n auto
+pytest -n 2
 ```
+
+---
+
+# Browser Selection (NEW)
+
+Run tests on different browsers:
+
+```
+pytest --browser=chrome
+pytest --browser=firefox
+```
+
+If not provided, browser defaults to config file.
+
+---
+
+# Environment Selection (NEW)
+
+Run tests against different environments:
+
+```
+pytest --env=dev
+pytest --env=staging
+pytest --env=prod
+```
+
+Environment settings are defined in:
+
+```
+config/config.ini
+```
+
+---
+
+# Headless Execution
+
+Run tests in headless mode (used in CI):
+
+```
+pytest --headless
+```
+
+---
+
+# CI/CD Pipeline
+
+This project includes a **GitHub Actions pipeline** that:
+
+* Runs tests on every push and pull request
+* Executes tests in headless mode
+* Generates HTML reports
+* Uploads reports, logs, and screenshots as artifacts
 
 ---
 
@@ -168,19 +207,12 @@ After execution, the framework generates:
 reports/report.html
 ```
 
-The HTML report includes:
+Includes:
 
-* Test execution results
 * Pass / fail status
 * Execution time
 * Error stack traces
-* Embedded failure screenshots
-
-Open the report in your browser:
-
-```
-reports/report.html
-```
+* Embedded screenshots
 
 ---
 
@@ -192,7 +224,7 @@ Execution logs are stored in:
 logs/test.log
 ```
 
-Logs include structured test steps such as:
+Example:
 
 ```
 HomePage | Searching flights: Boston -> London
@@ -201,30 +233,24 @@ PurchasePage | Filling passenger details
 ConfirmationPage | Booking confirmation received
 ```
 
-This helps debugging failed tests quickly.
-
 ---
 
 # Failure Screenshots
 
-When a test fails:
+On test failure:
 
-* A screenshot is automatically captured
-* The image is saved in the **screenshots/** directory
-* The screenshot is embedded in the **HTML report**
+* Screenshot is captured automatically
+* Saved in `screenshots/`
+* Embedded in HTML report
 
 ---
 
 # Future Improvements
 
-Potential enhancements for the framework:
-
 * Data-driven testing using **CSV or Excel files**
 * Allure reporting integration
-* CI/CD pipeline using **GitHub Actions**
-* Browser selection via command-line parameters
-* Headless test execution support
-* Test environment profiles (dev / staging / prod)
+* Docker + Selenium Grid for scalable parallel execution
+* Test tagging (smoke / regression suites)
 
 ---
 
