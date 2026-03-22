@@ -1,5 +1,8 @@
 name: Selenium Tests
 
+permissions:
+  contents: write
+
 env:
   BASE_URL: ${{ secrets.BASE_URL }}
 
