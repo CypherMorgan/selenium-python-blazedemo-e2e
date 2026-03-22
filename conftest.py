@@ -8,18 +8,19 @@ from config.config_reader import get_config
 
 def pytest_addoption(parser):
     parser.addoption("--headless", action="store_true", default=False)
+    parser.addoption("--browser", action="store", default="chrome")
 
 @pytest.fixture
 def driver(request):
     headless = request.config.getoption("--headless")
+    browser = request.config.getoption("--browser")
 
-    driver = get_driver(headless=headless)
+    driver = get_driver(browser=browser, headless=headless)
 
     base_url = get_config("environment", "base_url")
     driver.get(base_url)
 
     yield driver
-
     driver.quit()
 
 @pytest.hookimpl(hookwrapper=True)
