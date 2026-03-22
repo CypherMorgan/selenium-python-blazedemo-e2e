@@ -55,3 +55,13 @@ def pytest_runtest_setup(item):
 
 def pytest_runtest_teardown(item):
     logger.info(f"TEST FINISHED: {item.name}")
+
+def pytest_addoption(parser):
+    parser.addoption("--headless", action="store_true", default=False)
+
+@pytest.fixture
+def driver(request):
+    headless = request.config.getoption("--headless")
+    driver = get_driver(headless=headless)
+    yield driver
+    driver.quit()

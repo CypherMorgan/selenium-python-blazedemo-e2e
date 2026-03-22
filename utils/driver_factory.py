@@ -1,29 +1,23 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
 from config.config_reader import get_config
 
 
-def get_driver():
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
-    browser = get_config("environment", "browser")
+def get_driver(headless=True):
+    options = Options()
 
-    if browser.lower() == "chrome":
+    if headless:
+        options.add_argument("--headless=new")
 
-        options = webdriver.ChromeOptions()
-        options.add_argument("--start-maximized")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--window-size=1920,1080")
 
-        driver = webdriver.Chrome(
-            service=Service(ChromeDriverManager().install()),
-            options=options
-        )
-
-        driver.implicitly_wait(
-            int(get_config("environment", "timeout"))
-        )
-
-        return driver
-
-    else:
-        raise Exception("Browser not supported")
+    driver = webdriver.Chrome(options=options)
+    return driver
