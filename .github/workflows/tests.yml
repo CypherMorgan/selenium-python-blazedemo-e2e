@@ -33,7 +33,7 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest -n auto --html=reports/report.html --self-contained-html
+            pytest -n 2 --headless --html=reports/report.html --self-contained-html
 
       - name: Upload report
         uses: actions/upload-artifact@v4
