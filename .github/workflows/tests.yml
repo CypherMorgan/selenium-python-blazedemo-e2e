@@ -56,6 +56,10 @@ jobs:
           name: screenshots
           path: screenshots/
         
+      - name: Prepare report for Pages
+        run: |
+          cp reports/report.html reports/index.html
+
       - name: Deploy report to GitHub Pages
         if: always()
         uses: peaceiris/actions-gh-pages@v3
