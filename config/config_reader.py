@@ -13,6 +13,8 @@ config.read(config_path)
 
 
 def get_config(section, key):
+    import os
+
     env_value = os.getenv(key.upper())
     if env_value:
         return env_value
