@@ -1,15 +1,19 @@
 import pytest
 import pytest_html
+
 from utils.driver_factory import get_driver
 from utils.logger import get_logger
 from utils.screenshot import take_screenshot
 from config.config_reader import get_config
 
+def pytest_addoption(parser):
+    parser.addoption("--headless", action="store_true", default=False)
 
-@pytest.fixture(scope="function")
-def driver():
+@pytest.fixture
+def driver(request):
+    headless = request.config.getoption("--headless")
 
-    driver = get_driver()
+    driver = get_driver(headless=headless)
 
     base_url = get_config("environment", "base_url")
     driver.get(base_url)
@@ -18,21 +22,17 @@ def driver():
 
     driver.quit()
 
-
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
-
     outcome = yield
     report = outcome.get_result()
 
-    extra = getattr(report, "extra", [])
+    extras = getattr(report, "extras", [])
 
     if report.when == "call":
-
         driver = item.funcargs.get("driver")
 
         if report.failed and driver:
-
             screenshot_path = take_screenshot(driver, item.name)
 
             html = (
@@ -42,26 +42,14 @@ def pytest_runtest_makereport(item, call):
                 f'align="right"/></div>'
             )
 
-            extra.append(pytest_html.extras.html(html))
+            extras.append(pytest_html.extras.html(html))
 
-        report.extra = extra
+    report.extras = extras
 
 logger = get_logger("TestRunner")
-
 
 def pytest_runtest_setup(item):
     logger.info(f"TEST STARTED: {item.name}")
 
-
 def pytest_runtest_teardown(item):
     logger.info(f"TEST FINISHED: {item.name}")
-
-def pytest_addoption(parser):
-    parser.addoption("--headless", action="store_true", default=False)
-
-@pytest.fixture
-def driver(request):
-    headless = request.config.getoption("--headless")
-    driver = get_driver(headless=headless)
-    yield driver
-    driver.quit()
