@@ -13,6 +13,10 @@ config.read(config_path)
 
 
 def get_config(section, key):
+    env_value = os.getenv(key.upper())
+    if env_value:
+        return env_value
+
     return config.get(section, key)
 
 

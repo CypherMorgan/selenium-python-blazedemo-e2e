@@ -1,5 +1,8 @@
 name: Selenium Tests
 
+env:
+  BASE_URL: ${{ secrets.BASE_URL }}
+
 on:
   push:
     branches: [ main ]
