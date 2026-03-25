@@ -10,8 +10,6 @@ on:
   push:
     branches: [ main ]
   pull_request:
-  schedule:
-    - cron: '0 6 * * *'   # daily run
 
 jobs:
   test:
@@ -36,7 +34,7 @@ jobs:
 
       - name: Run tests
         run: |
-            pytest -n 2 --headless --html=reports/report.html --self-contained-html
+          pytest -n 2 --headless --html=reports/report.html --self-contained-html
 
       - name: Upload report
         uses: actions/upload-artifact@v4
@@ -65,4 +63,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./reports  
+          publish_dir: ./reports
